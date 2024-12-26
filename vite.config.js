@@ -1,8 +1,12 @@
 import {defineConfig} from "vite";
 import viteReact from "@vitejs/plugin-react";
+import viteYaml from "@modyfi/vite-plugin-yaml";
 
 export default defineConfig({
-    plugins: [viteReact()],
+    plugins: [
+        viteReact(),
+        viteYaml()
+    ],
     test: {
         globals: 'true',
         environment: 'jsdom',

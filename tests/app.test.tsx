@@ -1,11 +1,11 @@
 import {describe, expect, test} from "vitest";
 import {render, screen} from "@testing-library/react";
-import App from "../src/app";
+import App from "../src/modules/app/main";
 
 describe("root component", () => {
     test("should render hello world", () => {
        render(<App />);
        screen.debug();
-       expect(screen.getByText("Hello, World!")).toBeInTheDocument();
+       expect(screen.getByText("Olá, Mundo!")).toBeInTheDocument();
     });
 });
