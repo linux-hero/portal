@@ -1,5 +1,11 @@
-import {expect, test} from "vitest";
+import {describe, expect, test} from "vitest";
+import {render, screen} from "@testing-library/react";
+import App from "../src/app";
 
-test('basic arithmetic check', () => {
-    expect(1 + 1).toBe(2);
-})
+describe("root component", () => {
+    test("should render hello world", () => {
+       render(<App />);
+       screen.debug();
+       expect(screen.getByText("Hello, World!")).toBeInTheDocument();
+    });
+});
