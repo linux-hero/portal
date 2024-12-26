@@ -1,29 +1,32 @@
 import i18next from "i18next";
 import {initReactI18next} from "react-i18next";
 
-const translations: Record<string, any> = import.meta.glob('./modules/**/*/translations.*.yaml', { eager: true });
-const resources = Object.keys(translations).reduce((res, module: string) => {
-    const namespace = module.split("/").at(-2);
-    const filename = module.split("/").at(-1)
-    if (!namespace || !filename)
-        throw new Error(`Unable to parse ${module} translation`);
+export enum Language {
+    PORTUGUESE_BRAZIL = 'pt-BR'
+}
 
-    const lng = filename.split(".").at(-2);
-    if (!lng)
-        throw new Error(`Unable to parse ${module} translation`);
+const translations: Record<string, any> = import.meta.glob('./**/*/translations.*.yaml', { eager: true });
+const resources = (() => {
+    const resources: Record<string, any> = {}
+    for (const module in translations) {
+        const ns = module.split("/").slice(1, -1).join('::');
+        const lng = module.split("/").at(-1)?.split(".").at(-2);
+        if (!lng || !Object.values(Language).includes(lng as Language))
+            throw new Error(`Trying to setup a invalid or nonregistered translation language at module ${lng}`)
 
-    if (!res[lng])
-        res[lng] = {};
-    res[lng][namespace] = translations[module].default
+        if (!resources[lng])
+            resources[lng] = {};
+        Object.assign(resources[lng], { [ns]: translations[module].default })
+    }
 
-    return res;
-}, {} as any)
+    return resources
+})()
 
 i18next
     .use(initReactI18next)
     .init({
         resources,
-        lng: "pt",
+        lng: "pt-BR",
         interpolation: {
             escapeValue: false
         }
