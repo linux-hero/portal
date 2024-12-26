@@ -1,3 +1,7 @@
+import {useTranslation} from "react-i18next";
+
 export default function App() {
-    return <h1>Hello, World!</h1>
+    const { t } = useTranslation();
+
+    return <h1>{t("Welcome Message")}</h1>
 }
