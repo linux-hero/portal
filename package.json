@@ -23,6 +23,7 @@
   "dependencies": {
     "@xterm/xterm": "^5.5.0",
     "i18next": "^24.2.0",
+    "postcss-nesting": "^13.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.2.0"
