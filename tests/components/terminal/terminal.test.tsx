@@ -1,128 +1,138 @@
-import {describe, expect, test} from "vitest";
+import {beforeEach, describe, expect, test, vi} from "vitest";
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import Terminal from "../../../src/components/terminal/terminal";
 
 describe('terminal component', () => {
+    beforeEach(async () => {
+        render(<Terminal />);
+        await waitFor(() => {
+            screen.getByText("$");
+        });
+    });
+
     test('should render terminal element', () => {
-        render(<Terminal />);
         expect(screen.getByTestId("terminal")).toBeInTheDocument();
+        expect(screen.getByText("$")).toBeInTheDocument();
     });
 
-    test('should display prompt when rendering', async () => {
-       render(<Terminal />);
-       await waitFor(() => {
-           expect(screen.getByText("$")).toBeInTheDocument();
-       });
-    });
-
-    test('should print all numeric characters properly', async () => {
-       render(<Terminal />);
-       await waitFor(() => {
-           expect(screen.getByText("$")).toBeInTheDocument();
-       });
-       for (let i = 48; i <= 57; i++) {
-           fireEvent.keyPress(
-               screen.getByRole('textbox', { name: /terminal input/i }),
-               { charCode: i }
-           );
-
-           await waitFor(() => {
-               const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
-               expect(screen.getByText(regex)).toBeInTheDocument();
-           });
-       }
-    });
-
-    test('should print all uppercase letter characters properly', async () => {
-        render(<Terminal />);
-        await waitFor(() => {
-            expect(screen.getByText("$")).toBeInTheDocument();
-        });
-        for (let i = 65; i <= 90; i++) {
-            fireEvent.keyPress(
-                screen.getByRole('textbox', { name: /terminal input/i }),
-                { charCode: i }
-            );
-
-            await waitFor(() => {
-                const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
-                expect(screen.getByText(regex)).toBeInTheDocument();
-            });
-        }
-    });
-
-    test('should print all lowercase letter characters properly', async () => {
-        render(<Terminal />);
-        await waitFor(() => {
-            expect(screen.getByText("$")).toBeInTheDocument();
-        });
-        for (let i = 97; i <= 122; i++) {
-            fireEvent.keyPress(
-                screen.getByRole('textbox', { name: /terminal input/i }),
-                { charCode: i }
-            );
-
-            await waitFor(() => {
-                const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
-                expect(screen.getByText(regex)).toBeInTheDocument();
-            });
-        }
-    });
-
-    test('should print all special characters properly', async () => {
-        render(<Terminal />);
-        await waitFor(() => {
-            expect(screen.getByText("$")).toBeInTheDocument();
-        });
-
-        const ranges = [[33, 47], [58, 64], [91, 96], [123, 126]]
-        for (const [start, end] of ranges) {
-            for (let i = start; i <= end; i++) {
+    describe('default handler', () => {
+        test('should print all numeric characters properly', async () => {
+            for (let i = 48; i <= 57; i++) {
                 fireEvent.keyPress(
                     screen.getByRole('textbox', { name: /terminal input/i }),
                     { charCode: i }
                 );
 
                 await waitFor(() => {
-                    const regex = new RegExp(`\\${String.fromCharCode(i)}`, 'i');
+                    const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
                     expect(screen.getByText(regex)).toBeInTheDocument();
                 });
             }
-        }
-    });
-
-    test('should print space character properly', async () => {
-        render(<Terminal />);
-        await waitFor(() => {
-            expect(screen.getByText("$")).toBeInTheDocument();
         });
 
-        fireEvent.keyPress(
-            screen.getByRole('textbox', { name: /terminal input/i }),
-            { charCode: 32 }
-        );
+        test('should print all uppercase letter characters properly', async () => {
+            for (let i = 65; i <= 90; i++) {
+                fireEvent.keyPress(
+                    screen.getByRole('textbox', { name: /terminal input/i }),
+                    { charCode: i }
+                );
 
-        await waitFor(() => {
-            expect(screen.getByText("$").textContent).toBe("$  ");
-        });
-    });
-
-    test('should handle backspace character properly', async () => {
-        render(<Terminal />);
-        await waitFor(() => {
-            expect(screen.getByText(/\$/g)).toBeInTheDocument();
+                await waitFor(() => {
+                    const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
+                    expect(screen.getByText(regex)).toBeInTheDocument();
+                });
+            }
         });
 
-        const characters = [97, 97, 127];
-        for (const character of characters) {
+        test('should print all lowercase letter characters properly', async () => {
+            for (let i = 97; i <= 122; i++) {
+                fireEvent.keyPress(
+                    screen.getByRole('textbox', { name: /terminal input/i }),
+                    { charCode: i }
+                );
+
+                await waitFor(() => {
+                    const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
+                    expect(screen.getByText(regex)).toBeInTheDocument();
+                });
+            }
+        });
+
+        test('should print all special characters properly', async () => {
+            const ranges = [[33, 47], [58, 64], [91, 96], [123, 126]]
+            for (const [start, end] of ranges) {
+                for (let i = start; i <= end; i++) {
+                    fireEvent.keyPress(
+                        screen.getByRole('textbox', { name: /terminal input/i }),
+                        { charCode: i }
+                    );
+
+                    await waitFor(() => {
+                        const regex = new RegExp(`\\${String.fromCharCode(i)}`, 'i');
+                        expect(screen.getByText(regex)).toBeInTheDocument();
+                    });
+                }
+            }
+        });
+
+        test('should print space character properly', async () => {
             fireEvent.keyPress(
                 screen.getByRole('textbox', { name: /terminal input/i }),
-                { charCode: character }
+                { charCode: 32 }
             );
-        }
 
-        await waitFor(() => {
-            expect(screen.getByText(/\$/g).textContent).toBe("$ a");
+            await waitFor(() => {
+                expect(screen.getByText("$").textContent).toBe("$  ");
+            });
         });
     });
-})
+
+    describe('backspace handler', () => {
+        test('should delete the last character', async () => {
+            const characters = [97, 97, 127];
+            for (const character of characters) {
+                fireEvent.keyPress(
+                    screen.getByRole('textbox', { name: /terminal input/i }),
+                    { charCode: character }
+                );
+            }
+
+            await waitFor(() => {
+                expect(screen.getByText(/\$/i).textContent).toBe("$ a");
+            });
+        });
+    })
+
+    describe('carriage return handler', () => {
+        test('should print command to stdout', async () => {
+           const consoleSpy = vi.spyOn(console, 'log');
+
+           const characters = [97, 13];
+           for (const character of characters) {
+               fireEvent.keyPress(
+                   screen.getByRole('textbox', { name: /terminal input/i }),
+                   { charCode: character }
+               );
+           }
+
+           await waitFor(() => {
+               expect(screen.getByText("$ a")).toBeInTheDocument();
+               expect(consoleSpy).toHaveBeenCalledWith("command: a");
+           })
+        });
+
+        test('should print a new line', async () => {
+            const characters = [97, 13, 97];
+            for (const character of characters) {
+                fireEvent.keyPress(
+                    screen.getByRole('textbox', { name: /terminal input/i }),
+                    { charCode: character }
+                );
+            }
+
+            await waitFor(() => {
+                expect(screen.getAllByText("$ a").length).toBe(2);
+            });
+        });
+    });
+});
