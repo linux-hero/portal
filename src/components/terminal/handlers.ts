@@ -1,17 +1,19 @@
 import {Terminal} from "@xterm/xterm";
-import {Dispatch, SetStateAction} from "react";
 
 export interface TerminalOnKeyHandlerParams {
     terminal: Terminal;
     key: string;
     input: string;
-    setInput: Dispatch<SetStateAction<string>>;
 }
 
-export type TerminalOnKeyHandler = (params: TerminalOnKeyHandlerParams) => void;
+export type TerminalOnKeyHandler = (params: TerminalOnKeyHandlerParams) => string;
 
-export const defaultHandler: TerminalOnKeyHandler = (params) => {
-    const { key } = params;
+export const defaultHandler: TerminalOnKeyHandler = ({ terminal, key, input }) => {
+    terminal.write(key);
+    return input + key;
+};
 
-    console.log(key);
+export const deleteHandler: TerminalOnKeyHandler = ({ terminal, input }) => {
+    terminal.write('\b \b');
+    return input.slice(0, -1);
 }
