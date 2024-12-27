@@ -12,7 +12,7 @@ describe('terminal component', () => {
        render(<Terminal />);
        await waitFor(() => {
            expect(screen.getByText("$")).toBeInTheDocument();
-       })
+       });
     });
 
     test('should print all numeric characters properly', async () => {
@@ -29,7 +29,7 @@ describe('terminal component', () => {
            await waitFor(() => {
                const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
                expect(screen.getByText(regex)).toBeInTheDocument();
-           })
+           });
        }
     });
 
@@ -47,7 +47,7 @@ describe('terminal component', () => {
             await waitFor(() => {
                 const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
                 expect(screen.getByText(regex)).toBeInTheDocument();
-            })
+            });
         }
     });
 
@@ -65,7 +65,7 @@ describe('terminal component', () => {
             await waitFor(() => {
                 const regex = new RegExp(`${String.fromCharCode(i)}`, 'i');
                 expect(screen.getByText(regex)).toBeInTheDocument();
-            })
+            });
         }
     });
 
@@ -86,7 +86,7 @@ describe('terminal component', () => {
                 await waitFor(() => {
                     const regex = new RegExp(`\\${String.fromCharCode(i)}`, 'i');
                     expect(screen.getByText(regex)).toBeInTheDocument();
-                })
+                });
             }
         }
     });
@@ -104,6 +104,25 @@ describe('terminal component', () => {
 
         await waitFor(() => {
             expect(screen.getByText("$").textContent).toBe("$  ");
-        })
+        });
+    });
+
+    test('should handle backspace character properly', async () => {
+        render(<Terminal />);
+        await waitFor(() => {
+            expect(screen.getByText(/\$/g)).toBeInTheDocument();
+        });
+
+        const characters = [97, 97, 127];
+        for (const character of characters) {
+            fireEvent.keyPress(
+                screen.getByRole('textbox', { name: /terminal input/i }),
+                { charCode: character }
+            );
+        }
+
+        await waitFor(() => {
+            expect(screen.getByText(/\$/g).textContent).toBe("$ a");
+        });
     });
 })
