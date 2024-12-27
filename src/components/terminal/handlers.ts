@@ -22,7 +22,7 @@ export const deleteHandler: TerminalOnKeyHandler = ({ terminal, input }) => {
     return input;
 }
 
-export const newLineHandler: TerminalOnKeyHandler = ({ terminal, input }) => {
+export const newLineHandler: TerminalOnKeyHandler = ({ terminal }) => {
     terminal.write('\r\n');
     return "";
 }
@@ -42,8 +42,14 @@ export const commandHandler: TerminalOnKeyHandler = ({ input }) => {
     return input;
 }
 
+export const clearHandler: TerminalOnKeyHandler = ({ terminal }) => {
+    terminal.clear();
+    return "";
+}
+
 export const defaultHandlers: Record<string, TerminalOnKeyHandler[]> = {
     '\x09': [tabHandler],
+    '\x0c': [clearHandler],
     '\x0d': [commandHandler, newLineHandler, promptHandler],
     '\x7f': [deleteHandler],
     'default': [defaultHandler],

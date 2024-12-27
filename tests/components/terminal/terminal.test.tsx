@@ -151,4 +151,21 @@ describe('terminal component', () => {
             })
         });
     });
+
+    describe('clear handler', () => {
+        test('should clear the terminal', async () => {
+            const characters = [97, 13, 97, 13, 12];
+            for (const character of characters) {
+                fireEvent.keyPress(
+                    screen.getByRole('textbox', { name: /terminal input/i }),
+                    { charCode: character }
+                );
+            }
+
+            await waitFor(() => {
+                expect(screen.getAllByText(/\$/i).length).toBe(1);
+                expect(screen.getByText(/\$/i).textContent).toBe("$ ");
+            })
+        });
+    })
 });
