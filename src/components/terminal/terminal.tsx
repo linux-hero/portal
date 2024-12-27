@@ -31,10 +31,7 @@ export default function Terminal() {
                     terminal, key, input: prevInput,
                 }
 
-                const newInput = runHandlers(params);
-
-                console.log(newInput);
-                return(newInput);
+                return runHandlers(params);
             })
         }));
     }
