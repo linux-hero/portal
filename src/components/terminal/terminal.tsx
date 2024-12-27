@@ -1,7 +1,11 @@
 import {useEffect, useState} from "react";
 import {IDisposable, Terminal as XTermTerminal} from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
-import {defaultHandler, deleteHandler, TerminalOnKeyHandler, TerminalOnKeyHandlerParams} from "./handlers";
+import {
+    promptHandler,
+    runHandlers,
+    TerminalOnKeyHandlerParams
+} from "./handlers";
 
 export default function Terminal() {
     const [terminal] = useState(new XTermTerminal());
@@ -12,6 +16,7 @@ export default function Terminal() {
     function openTerminal() {
         setOpen(true);
         terminal.open(document.getElementById("terminal")!)
+        runHandlers({ terminal, key: "", input: "" }, [promptHandler]);
     }
 
     function setupTerminal() {
@@ -20,20 +25,13 @@ export default function Terminal() {
             setOnKey(null);
         }
 
-        const handlers: Record<string, TerminalOnKeyHandler> = {
-            '\x7f': deleteHandler,
-            'default': defaultHandler,
-        }
-
         setOnKey(terminal.onKey(({key}) => {
             setInput((prevInput) => {
                 const params: TerminalOnKeyHandlerParams = {
                     terminal, key, input: prevInput,
                 }
 
-                const newInput = handlers[key]
-                    ? handlers[key](params)
-                    : handlers['default'](params);
+                const newInput = runHandlers(params);
 
                 console.log(newInput);
                 return(newInput);
