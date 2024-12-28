@@ -24,3 +24,8 @@ jobs:
         run: pnpm install
       - name: Run Unit Tests
         run: pnpm test
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: linux-hero/portal
