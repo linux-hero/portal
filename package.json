@@ -18,13 +18,13 @@
     "@vitejs/plugin-react": "^4.3.4",
     "canvas": "^3.0.0",
     "jsdom": "^25.0.1",
+    "postcss-nesting": "^13.0.1",
     "vite": "^5.4.11",
     "vitest": "^2.1.8"
   },
   "dependencies": {
     "@xterm/xterm": "^5.5.0",
     "i18next": "^24.2.0",
-    "postcss-nesting": "^13.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.2.0"

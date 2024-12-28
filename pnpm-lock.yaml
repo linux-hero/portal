@@ -14,9 +14,6 @@ importers:
       i18next:
         specifier: ^24.2.0
         version: 24.2.0
-      postcss-nesting:
-        specifier: ^13.0.1
-        version: 13.0.1(postcss@8.4.49)
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -51,6 +48,9 @@ importers:
       jsdom:
         specifier: ^25.0.1
         version: 25.0.1(canvas@3.0.0)
+      postcss-nesting:
+        specifier: ^13.0.1
+        version: 13.0.1(postcss@8.4.49)
       vite:
         specifier: ^5.4.11
         version: 5.4.11
