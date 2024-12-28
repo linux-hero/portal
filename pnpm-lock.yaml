@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@leaningtech/cheerpx':
+        specifier: ^1.0.9
+        version: 1.0.9
       '@xterm/xterm':
         specifier: ^5.5.0
         version: 5.5.0
@@ -331,6 +334,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@leaningtech/cheerpx@1.0.9':
+    resolution: {integrity: sha512-gY//LdMunLdPtQB/6wutrFaNrdokyJRpaKhxOw/U3O8uP9g0RmT9kQcAbHYALHikE8ypbG40WVkoaGuWPyYwRg==}
 
   '@modyfi/vite-plugin-yaml@1.1.0':
     resolution: {integrity: sha512-L26xfzkSo1yamODCAtk/ipVlL6OEw2bcJ92zunyHu8zxi7+meV0zefA9xscRMDCsMY8xL3C3wi3DhMiPxcbxbw==}
@@ -1597,6 +1603,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@leaningtech/cheerpx@1.0.9': {}
 
   '@modyfi/vite-plugin-yaml@1.1.0(rollup@4.29.1)(vite@5.4.11)':
     dependencies:
