@@ -24,6 +24,7 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
+    "@leaningtech/cheerpx": "^1.0.9",
     "@xterm/xterm": "^5.5.0",
     "i18next": "^24.2.0",
     "react": "^19.0.0",
