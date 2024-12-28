@@ -10,6 +10,11 @@ export default defineConfig({
     test: {
         globals: 'true',
         environment: 'jsdom',
-        setupFiles: './tests/hooks/setup.tsx'
+        setupFiles: './tests/hooks/setup.tsx',
+        coverage: {
+            provider: 'v8',
+            include: ['src/**'],
+            extension: ['ts', 'tsx']
+        }
     }
 })

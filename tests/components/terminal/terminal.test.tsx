@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, test, vi} from "vitest";
+import {beforeAll, beforeEach, describe, expect, MockInstance, test, vi} from "vitest";
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import Terminal from "../../../src/components/terminal/terminal";
 
@@ -101,12 +101,26 @@ describe('terminal component', () => {
                 expect(screen.getByText(/\$/i).textContent).toBe("$ a");
             });
         });
+
+        test('should delete nothing when input is empty', async () => {
+            fireEvent.keyPress(
+                screen.getByRole('textbox', { name: /terminal input/i }),
+                { charCode: 127 }
+            );
+
+            await waitFor(() => {
+                expect(screen.getByText(/\$/i).textContent).toBe("$ ");
+            });
+        });
     })
 
     describe('carriage return handler', () => {
-        test('should print command to stdout', async () => {
-           const consoleSpy = vi.spyOn(console, 'log');
+        let consoleSpy: MockInstance;
+        beforeAll(() => {
+           consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+        });
 
+        test('should print command to stdout', async () => {
            const characters = [97, 13];
            for (const character of characters) {
                fireEvent.keyPress(
@@ -154,7 +168,7 @@ describe('terminal component', () => {
 
     describe('clear handler', () => {
         test('should clear the terminal', async () => {
-            const characters = [97, 13, 97, 13, 12];
+            const characters = [97, 98, 99, 12];
             for (const character of characters) {
                 fireEvent.keyPress(
                     screen.getByRole('textbox', { name: /terminal input/i }),

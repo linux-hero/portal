@@ -56,14 +56,12 @@ export const defaultHandlers: Record<string, TerminalOnKeyHandler[]> = {
 }
 
 export function runHandlers(params: TerminalOnKeyHandlerParams, handlers?: TerminalOnKeyHandler[]) {
-    let input = params.input;
-    if (handlers)
-        for (const handler of handlers)
-            input = handler(params);
-    else
-        input = defaultHandlers[params.key]
-            ? runHandlers(params, defaultHandlers[params.key])
-            : runHandlers(params, defaultHandlers['default']);
+    if (!handlers)
+        handlers = defaultHandlers[params.key]
+            ? defaultHandlers[params.key]
+            : defaultHandlers['default'];
+    for (const handler of handlers)
+        params.input = handler(params);
 
-    return input;
+    return params.input;
 }
